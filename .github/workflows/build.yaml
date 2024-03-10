@@ -1,0 +1,28 @@
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "Test"
+        run: |
+          dotnet test -c release
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "Build"
+        run: |
+          docker build -t ghrawel-tokenprovider-lambda-dotnet \
+          --build-arg ARCH=linux-x64 \
+          --build-arg IMAGE_TAG=latest-x86_64 .
